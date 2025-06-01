@@ -1,0 +1,451 @@
+/* 
+ * Fantasy Pixel Adventure - Main Stylesheet
+ * A dark fantasy themed 8-bit style game UI
+ */
+
+/* ---------- CSS Reset & Base Styles ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: 'PixelFont';
+  src: url('../assets/ui/fonts/pixel-font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Color Palette - Dark fantasy with bright accents */
+  --color-bg-dark: #0a0a12;
+  --color-bg-medium: #1a1a2e;
+  --color-bg-light: #2a2a3e;
+  --color-text-primary: #e6e6fa;
+  --color-text-secondary: #b8b8d0;
+  --color-accent-primary: #7b68ee; /* Bright purple */
+  --color-accent-secondary: #4deeea; /* Cyan */
+  --color-accent-tertiary: #ff5e5e; /* Red */
+  --color-accent-quaternary: #ffac41; /* Gold */
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-danger: #f87171;
+  
+  /* Typography */
+  --font-primary: 'PixelFont', monospace;
+  --font-fallback: 'Courier New', monospace;
+  
+  /* Sizing */
+  --border-radius: 4px;
+  --border-width: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Animation */
+  --transition-fast: 0.1s;
+  --transition-medium: 0.2s;
+  --transition-slow: 0.4s;
+  
+  /* UI Elements */
+  --chat-width: 400px;
+  --chat-height: 500px;
+  --loading-bar-height: 24px;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-primary);
+  font-family: var(--font-primary), var(--font-fallback);
+  line-height: 1.5;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ---------- Layout & Game Container ---------- */
+#game-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+canvas {
+  display: block;
+  margin: 0 auto;
+  image-rendering: pixelated; /* Keep pixel art crisp */
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* ---------- Loading Screen ---------- */
+#loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: opacity var(--transition-slow) ease-in-out;
+}
+
+.loading-content {
+  text-align: center;
+  width: 80%;
+  max-width: 600px;
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg-medium);
+  border: var(--border-width) solid var(--color-accent-primary);
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 20px rgba(123, 104, 238, 0.4);
+}
+
+.loading-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-accent-quaternary);
+  text-shadow: 3px 3px 0 var(--color-bg-dark);
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+.loading-bar-container {
+  width: 100%;
+  height: var(--loading-bar-height);
+  background-color: var(--color-bg-light);
+  border: var(--border-width) solid var(--color-accent-secondary);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin: var(--spacing-md) 0;
+}
+
+#loading-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(
+    to right,
+    var(--color-accent-primary),
+    var(--color-accent-secondary)
+  );
+  transition: width var(--transition-medium) ease-out;
+  box-shadow: 0 0 10px var(--color-accent-secondary);
+}
+
+#loading-text {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-md);
+}
+
+/* ---------- Chat Overlay & UI ---------- */
+#chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 18, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  transition: opacity var(--transition-medium) ease-in-out;
+}
+
+.chat-container {
+  width: var(--chat-width);
+  height: var(--chat-height);
+  background-color: var(--color-bg-medium);
+  border: var(--border-width) solid var(--color-accent-primary);
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(123, 104, 238, 0.4);
+  animation: slideUp var(--transition-medium) ease-out;
+}
+
+.chat-header {
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--border-width) solid var(--color-bg-light);
+}
+
+#npc-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 0 var(--color-bg-dark);
+}
+
+#close-chat {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color var(--transition-fast) ease;
+}
+
+#close-chat:hover {
+  color: var(--color-accent-tertiary);
+}
+
+#chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  background-color: var(--color-bg-light);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent-primary) var(--color-bg-medium);
+}
+
+#chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#chat-messages::-webkit-scrollbar-track {
+  background: var(--color-bg-medium);
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent-primary);
+  border-radius: var(--border-radius);
+}
+
+.message {
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  max-width: 80%;
+  word-break: break-word;
+  animation: fadeIn var(--transition-fast) ease-out;
+}
+
+.message.player {
+  align-self: flex-end;
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-bg-dark);
+}
+
+.message.npc {
+  align-self: flex-start;
+  background-color: var(--color-bg-medium);
+  color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-accent-secondary);
+}
+
+.chat-input-container {
+  display: flex;
+  padding: var(--spacing-sm);
+  background-color: var(--color-bg-medium);
+  border-top: var(--border-width) solid var(--color-bg-light);
+  gap: var(--spacing-xs);
+}
+
+#chat-input {
+  flex: 1;
+  padding: var(--spacing-sm);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-accent-secondary);
+  border-radius: var(--border-radius);
+  font-family: var(--font-primary), var(--font-fallback);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--transition-fast) ease;
+}
+
+#chat-input:focus {
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 0 5px var(--color-accent-primary);
+}
+
+button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-bg-dark);
+  border-radius: var(--border-radius);
+  font-family: var(--font-primary), var(--font-fallback);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button:hover {
+  background-color: var(--color-accent-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+#store-button {
+  background-color: var(--color-accent-quaternary);
+}
+
+#store-button:hover {
+  background-color: var(--color-accent-tertiary);
+}
+
+/* ---------- Responsive Design ---------- */
+@media (max-width: 768px) {
+  :root {
+    --chat-width: 90%;
+    --chat-height: 70%;
+  }
+  
+  .loading-content {
+    width: 90%;
+    padding: var(--spacing-md);
+  }
+  
+  .loading-content h1 {
+    font-size: 2rem;
+  }
+  
+  #chat-messages {
+    padding: var(--spacing-sm);
+  }
+  
+  button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  #npc-name {
+    font-size: 1rem;
+  }
+  
+  .message {
+    max-width: 90%;
+  }
+  
+  .chat-input-container {
+    flex-wrap: wrap;
+  }
+  
+  #chat-input {
+    width: 100%;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  button {
+    flex: 1;
+    min-width: 70px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ---------- Animations & Transitions ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+@keyframes pixelate {
+  0% { filter: blur(5px); }
+  100% { filter: blur(0); }
+}
+
+/* ---------- Utility Classes ---------- */
+.hidden {
+  display: none !important;
+}
+
+.pixel-border {
+  border-style: solid;
+  border-width: var(--border-width);
+  image-rendering: pixelated;
+}
+
+.pixel-text {
+  text-shadow: 2px 2px 0 var(--color-bg-dark);
+  letter-spacing: 1px;
+}
+
+.pixel-button {
+  position: relative;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-accent-primary);
+  color: var(--color-text-primary);
+  border: none;
+  font-family: var(--font-primary), var(--font-fallback);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-fast) ease;
+}
+
+.pixel-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: var(--border-width) solid var(--color-bg-dark);
+  box-sizing: border-box;
+}
+
+.pixel-button:hover {
+  transform: translate(-2px, -2px);
+}
+
+.pixel-button:hover::before {
+  transform: translate(4px, 4px);
+}
+
+.pixel-button:active {
+  transform: translate(0, 0);
+}
+
+.pixel-button:active::before {
+  transform: translate(2px, 2px);
+}
