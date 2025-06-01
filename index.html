@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="A 2D top-down pixel fantasy game with AI-powered NPCs">
+    <meta name="theme-color" content="#000000">
+    <title>Fantasy Pixel Adventure</title>
+    
+    <!-- Phaser.js from CDN for development -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.min.js"></script>
+    
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="styles/main.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/ui/favicon.png">
+</head>
+<body>
+    <!-- Game container -->
+    <div id="game-container"></div>
+    
+    <!-- Chat overlay for NPC interactions -->
+    <div id="chat-overlay" class="hidden">
+        <div class="chat-container">
+            <div class="chat-header">
+                <span id="npc-name">NPC Name</span>
+                <button id="close-chat" aria-label="Close chat">×</button>
+            </div>
+            <div id="chat-messages"></div>
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off">
+                <button id="send-message">Send</button>
+                <button id="store-button" class="hidden">View Store</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading screen -->
+    <div id="loading-screen">
+        <div class="loading-content">
+            <h1>Fantasy Pixel Adventure</h1>
+            <div class="loading-bar-container">
+                <div id="loading-bar"></div>
+            </div>
+            <p id="loading-text">Loading game assets...</p>
+        </div>
+    </div>
+    
+    <!-- Game scripts -->
+    <script src="src/main.js" type="module"></script>
+</body>
+</html>
